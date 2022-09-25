@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
-    internal interface ICalculater
+    public interface ICalculater
     {
-        double CalculateCost(Order order);
+        double CalculateCost(double distance, double weight, double size);
     }
 }

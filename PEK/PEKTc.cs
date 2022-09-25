@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Core;
+using Data;
+using Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +12,11 @@ namespace PEK
     public class PEKTc:Tc,ICalculater
     {
         private static DatabaseContext db = new DatabaseContext();
-        private static Tc tc = db.TransportCompanies.FirstOrDefault(t => t.Name == "ПЭК");
-        public double CalculateCost(Order order)
+        private static Tc tc = db.Tcs.FirstOrDefault(t => t.Name == "ПЭК");
+
+        public double CalculateCost(double distance, double weight, double size)
         {
-            return order.Distance * tc.CoefficientOfKilometer + order.Size * tc.CoefficientOfSize + order.Weight * tc.CoefficientOfKilogram;
+            return distance * tc.CoefficientOfKilometer + size * tc.CoefficientOfSize + weight * tc.CoefficientOfKilogram;
         }
     }
 }

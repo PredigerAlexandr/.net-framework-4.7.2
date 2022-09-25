@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static JsonModels.GetDistanceJson;
 
 namespace Logic
 {
@@ -16,6 +18,23 @@ namespace Logic
 
         public Distance(List<double> allCoords)
         {
+            if (allCoords.Count != 4)
+            {
+                points = new Dictionary<string, double>[] {new Dictionary<string, double>
+                {
+                    ["lat"] = 0,
+                    ["lon"] = 0,
+                },
+                new Dictionary<string, double>
+                {
+                    ["lat"] = 0,
+                    ["lon"] = 0
+                }
+                };
+                sources = new int[] { 0 };
+                targets = new int[] { 1 };
+                return;
+            }
             points = new Dictionary<string, double>[] {new Dictionary<string, double>
                 {
                     ["lat"] = allCoords[1],
