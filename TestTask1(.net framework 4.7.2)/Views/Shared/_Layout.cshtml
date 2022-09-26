@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿  @{ 
+    int SDEKId = 1;
+    var PECId = 2;
+    var EnergyId = 3;
+}
+
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -21,10 +27,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Информация", "About", "Home")</li>
-                    <li>@Html.ActionLink("Связаться", "Contact", "Home")</li>
                     <li>@Html.ActionLink("Расчитать", "CreateOrder", "TransportCompany")</li>
+                    <li>@Html.ActionLink("Транспортные компании", "TransportCompanies", "TransportCompany")</li>
                 </ul>
             </div>
         </div>

@@ -1,19 +1,16 @@
-﻿@using Core;
-@model TestTask1_.net_framework_4._7._2_.Models.ViewModels.ViewModelOrder
-
+﻿@model TestTask1_.net_framework_4._7._2_.Models.ViewModels.ViewModelOrders
 
 @{
     ViewBag.Title = "AddOrder";
 }
 
-<h2>AddOrder</h2>
+<h2>Расчитать доставку</h2>
 
 @using (Html.BeginForm("CreateOrder", "TransportCompany", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Order</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -59,7 +56,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Weight, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "form-control", Value = "" } })
                 @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -67,7 +64,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Size, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Size, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Size, new { htmlAttributes = new { @class = "form-control", Value = "" } })
                 @Html.ValidationMessageFor(model => model.Size, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -80,32 +77,41 @@
         </div>
     </div>
 }
-@if (ViewBag.Orders != null)
+@if (Model != null && Model.Orders != null)
 {
-    <ol class="list-group list-group-numbered">
-        @foreach (Order item in ViewBag.Orders)
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Компания</th>
+                <th>Расстояние</th>
+                <th>Цена</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Orders)
         {
-           // @using (Html.BeginForm("ShowTc", "TransportCompany", FormMethod.Post))
-            //{
-                <li class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        @*<div class="fw-bold">
-                            <b>
-                                @Html.EditorFor(item => item.Size, new { htmlAttributes = new { @class = "form-control" } })
-                            </b>
-                        </div>*@
-                        <div class="fw-bold"><b>@item.Tc.Name</b></div>
-                        Расстояние: @item.Distance км
-                    </div>
-                    <span class="">
-                        <a asp-controller="TransportСompany" asp-action="TcShow" asp-all-route-data='new Dictionary<string,string> { { "FirstName", @item.FirstName }, {"SurName", @item.SurName },
-                { "FirstPlace", @item.FirstPlace },{"LastPlace", @item.LastPlace},{"Phone", Convert.ToString(@item.Phone)},
-                {"Weight", Convert.ToString(@item.Weight)}, {"Size",Convert.ToString(@item.Size)}, {"Distance",Convert.ToString(@item.Distance)},
-                {"Company",Convert.ToString(@item.Tc.Id)}, {"Price",Convert.ToString(@item.Price)}}'>@item.Price р</a>
-                    </span>
-                </li>
-             }
-         }
+            <tr>
+                @using (Html.BeginForm("AddOrder", "TransportCompany", FormMethod.Post))
+                {
 
-        </ol>
+                    <td>@item.TcName</td>
+                    <td>@item.Distance км </td>
+                    <td>@item.Price</td>
+                    @Html.Hidden("TcId", item.TcId)
+                    @Html.Hidden("Distance", item.Distance)
+                    @Html.Hidden("Price", item.Price)
+                    @Html.Hidden("FirstName", item.FirstName)
+                    @Html.Hidden("SurName", item.SurName)
+                    @Html.Hidden("Phone", item.Phone)
+                    @Html.Hidden("FirstPlace", item.Phone)
+                    @Html.Hidden("LastPlace", item.Phone)
+                    @Html.Hidden("Weight", item.Weight)
+                    @Html.Hidden("Size", item.Size)
+
+                    <td><button type="submit">Отправить</button> </td>
+                }
+            </tr>
+        }
+
+    </table>
 }

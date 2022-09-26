@@ -12,6 +12,10 @@ using System.Web;
 using System.Web.Mvc;
 using TestTask1_.net_framework_4._7._2_.Models.ViewModels;
 using Data;
+using System.Diagnostics;
+using System.Data.Entity;
+using System.IO;
+using ClosedXML.Excel;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
@@ -22,34 +26,35 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
         DatabaseContext db = new DatabaseContext();
         public ActionResult CreateOrder()
         {
-            return View();
+            return View(new ViewModelOrders());
         }
 
 
         [HttpPost]
-        public async Task<ActionResult> CreateOrder(ViewModelOrder order)
+        public async Task<ActionResult> CreateOrder(ViewModelOrders model)
         {
-            List<double> FirstCoords = await Coords.GetCoords(order.FirstPlace);
-            List<double> LastCoords = await Coords.GetCoords(order.LastPlace);
+            List<double> FirstCoords = await Coords.GetCoords(model.FirstPlace);
+            List<double> LastCoords = await Coords.GetCoords(model.LastPlace);
             if (FirstCoords.Count == 0)
             {
-                ModelState.AddModelError(nameof(order.FirstPlace), "Не можем найти пункт назначения");
+                ModelState.AddModelError(nameof(model.FirstPlace), "Не можем найти пункт назначения");
             }
             if (LastCoords.Count == 0)
             {
-                ModelState.AddModelError(nameof(order.LastPlace), "Не можем найти пункт назначения");
+                ModelState.AddModelError(nameof(model.LastPlace), "Не можем найти пункт назначения");
             }
             var query_params = new Distance(FirstCoords.Concat(LastCoords).ToList());
             double distance = Distance.GetDistance(query_params);
             if (distance == 0)
             {
-                ModelState.AddModelError(nameof(order.LastPlace), "Нет дорог между населёнными пунктами");
+                ModelState.AddModelError(nameof(model.LastPlace), "Нет дорог между населёнными пунктами");
             }
 
-            List<Order> orders = new List<Order>();
             if (ModelState.IsValid)
             {
                 var companies = _repoTc.GetTcs();
+
+                var orders = new List<ViewModelOrderItem>();
                 foreach (var company in companies)
                 {
                     double price = 0;
@@ -57,73 +62,136 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                     {
                         case ("СДЭК"):
                             SDEKTc sdekTc = new SDEKTc();
-                            price = sdekTc.CalculateCost(distance, order.Weight, order.Size);
+                            price = sdekTc.CalculateCost(distance, model.Weight, model.Size);
                             break;
                         case ("ПЭК"):
                             PEKTc pekTc = new PEKTc();
-                            price = pekTc.CalculateCost(distance, order.Weight, order.Size);
+                            price = pekTc.CalculateCost(distance, model.Weight, model.Size);
                             break;
                         case ("Энергия"):
                             EnergyTc energyTc = new EnergyTc();
-                            price = energyTc.CalculateCost(distance, order.Weight, order.Size);
+                            price = energyTc.CalculateCost(distance, model.Weight, model.Size);
                             break;
                     }
 
-                    orders.Add(new Order()
+                    orders.Add(new ViewModelOrderItem()
                     {
-                        FirstName = order.FirstName,
-                        SurName = order.SurName,
-                        Phone = order.Phone,
-                        FirstPlace = order.FirstPlace,
-                        LastPlace = order.LastPlace,
-                        Weight = order.Weight,
-                        Size = order.Size,
-                        Date = DateTime.Now,
+                        FirstName = model.FirstName,
+                        SurName = model.SurName,
+                        Phone = model.Phone,
+                        FirstPlace = model.FirstPlace,
+                        LastPlace = model.LastPlace,
+                        Weight = model.Weight,
+                        Size = model.Size,
                         Price = price,
                         Distance = Convert.ToInt32(distance),
-                        Tc = company
+                        TcId = company.Id,
+                        TcName = company.Name,
                     });
                 }
-                ViewBag.Orders = orders;
-                return View(order);
+
+                model.Orders = orders;
+
+                return View(model);
+
             }
-            
-                return View(order);
+
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult ShowTc(string FirstName, string SurName, string Phone, string FirstPlace, string LastPlace, string Weight, string Size, string Distance, string Company, string Price, string tcName = "")
+        public ActionResult AddOrder(ViewModelOrderItem model)
         {
-            if (tcName == "")
+            var order = new Order()
             {
-                Order order = new Order()
-                {
-                    FirstName = FirstName,
-                    SurName = SurName,
-                    Phone = Phone,
-                    FirstPlace = FirstPlace,
-                    LastPlace = LastPlace,
-                    Weight = Convert.ToDouble(Weight),
-                    Size = Convert.ToDouble(Size),
-                    Date = DateTime.Now,
-                    Distance = Convert.ToInt32(Distance),
-                    Price = Convert.ToDouble(Price),
-                    Tc = db.Transport_companies.FirstOrDefault(p => p.Id == Convert.ToInt32(Company))
-                };
-                db.Orders.Add(order);
-                db.SaveChanges();
+                FirstName = model.FirstName,
+                SurName = model.SurName,
+                Phone = model.Phone,
+                FirstPlace = model.FirstPlace,
+                LastPlace = model.LastPlace,
+                Weight = model.Weight,
+                Size = model.Size,
+                Price = model.Price,
+                Distance = model.Distance,
+                TcId = model.TcId,
+                Date = DateTime.Now
+            };
+            _repoOrder.CreateOrder(order);
 
-                return Redirect("AllCalculator");
-            }
-            else
+            return RedirectToAction("ShowTc", new { model.TcId });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ShowTc(int tcId)
+        {
+
+            ViewModelTc viewModelTc = new ViewModelTc()
             {
-                db.Orders.ToList();
-                var Tc = db.Transport_companies.FirstOrDefault(t => t.Name == tcName);
-                IOrderedQueryable orders = db.Orders.Where(o => o.Tc.Id == Tc.Id).OrderBy(o => o.Date);
-                ViewBag.Orders = orders;
-                return View(Tc);
+                Tc = _repoTc.GetTc(tcId),
+                Orders = db.Orders.Where(o => o.TcId == tcId).OrderBy(o => o.Date).ToList()
+            };
+
+            return View(viewModelTc);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ExportExcel(int tcId)
+        {
+            using (XLWorkbook workbook = new XLWorkbook(XLEventTracking.Disabled))
+            {
+                var worksheet = workbook.Worksheets.Add("Заказы");
+
+                worksheet.Cell(1, 1).Value = "Имя";
+                worksheet.Cell(1, 2).Value = "Фамилия";
+                worksheet.Cell(1, 3).Value = "Откуда";
+                worksheet.Cell(1, 4).Value = "Куда";
+                worksheet.Cell(1, 5).Value = "Вес";
+                worksheet.Cell(1, 6).Value = "Размер";
+                worksheet.Cell(1, 7).Value = "Расстояние";
+                worksheet.Cell(1, 8).Value = "Цена";
+                worksheet.Cell(1, 9).Value = "ТК";
+                worksheet.Cell(1, 10).Value = "Дата";
+                worksheet.Row(1).Style.Font.Bold = true;
+
+                var orders = await db.Orders.Where(o => o.Tc.Id == tcId).OrderBy(o => o.Date).ToListAsync();
+                int iter = 1;
+                foreach (Order item in orders)
+                {
+                    iter++;
+                    worksheet.Cell(iter, 1).Value = item.FirstName;
+                    worksheet.Cell(iter, 2).Value = item.SurName;
+                    worksheet.Cell(iter, 3).Value = item.FirstPlace;
+                    worksheet.Cell(iter, 4).Value = item.LastPlace;
+                    worksheet.Cell(iter, 5).Value = item.Weight;
+                    worksheet.Cell(iter, 6).Value = item.Size;
+                    worksheet.Cell(iter, 7).Value = item.Distance;
+                    worksheet.Cell(iter, 8).Value = item.Price;
+                    worksheet.Cell(iter, 9).Value = _repoTc.GetTc(tcId).Name;
+                    worksheet.Cell(iter, 10).Value = item.Date;
+                }
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    stream.Flush();
+
+                    return new FileContentResult(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        FileDownloadName = "orders.xlsx"
+                    };
+                }
             }
-            return View();
+
+        }
+
+        public ActionResult TransportCompanies()
+        {
+            ViewModelTcs tcs = new ViewModelTcs()
+            {
+                Tcs = _repoTc.GetTcs()
+            };
+            return View(tcs);
         }
     }
+
 }

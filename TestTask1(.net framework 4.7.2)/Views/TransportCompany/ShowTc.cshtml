@@ -1,0 +1,36 @@
+﻿@model TestTask1_.net_framework_4._7._2_.Models.ViewModels.ViewModelTc
+@{
+    ViewBag.Title = "ShowTc";
+}
+
+<h2>@Model.Tc.Name</h2>
+<h3>Заказы</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Заказчик</th>
+            <th>Дата</th>
+            <th>Расстояние</th>
+            <th>Путь</th>
+            <th>Цена</th>
+            <th></th>
+        </tr>
+    </thead>
+    @foreach (var item in Model.Orders)
+    {
+        <tr>
+            @using (Html.BeginForm("AddOrder", "TransportCompany", FormMethod.Post))
+            {
+
+                <td>@item.SurName @item.FirstName</td>
+                <td>@item.Date</td>
+                <td>@item.Distance км </td>
+                <td>@item.FirstPlace -> @item.LastPlace</td>
+                <td>@item.Price</td>
+
+            }
+        </tr>
+    }
+</table>
+@Html.ActionLink("Получить Excel-таблицу", "ExportExcel", "TransportCompany", new { tcId = Model.Tc.Id}, null)

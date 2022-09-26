@@ -16,7 +16,7 @@ namespace TestTask1_.net_framework_4._7._2_
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "TransportCompany", action = "CreateOrder", id = UrlParameter.Optional }
             );
         }
     }

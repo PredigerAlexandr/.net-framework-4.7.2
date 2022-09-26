@@ -7,7 +7,7 @@ using System.Web;
 
 namespace TestTask1_.net_framework_4._7._2_.Models.ViewModels
 {
-    public class ViewModelOrder
+    public class ViewModelOrderItem
     {
         [DisplayName("Имя")]
         [Required(ErrorMessage = "Ввведите корректные данные")]
@@ -40,9 +40,13 @@ namespace TestTask1_.net_framework_4._7._2_.Models.ViewModels
         [DisplayName("Объём(куб.см)")]
         [Required(ErrorMessage = "Ввведите корректные данные")]
         public double Size { get; set; }
+        public double Price { get; set; }
 
-        public int Price { get; set; }
+        public int Distance { get; set; }
 
-        public double Distance { get; set; }
+        public int TcId { get; set; }
+
+        public string TcName { get; set; }
+
     }
 }

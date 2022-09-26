@@ -1,0 +1,13 @@
+﻿@model TestTask1_.net_framework_4._7._2_.Models.ViewModels.ViewModelTcs
+@{
+    ViewBag.Title = "TransportCompanies";
+}
+
+<h2>Трансопртные компании</h2>
+
+@foreach (var tc in Model.Tcs)
+{
+    <h2>@Html.ActionLink(tc.Name, "ShowTc", "TransportCompany", new { tcId = tc.Id }, null)</h2><br>
+}
+
+
