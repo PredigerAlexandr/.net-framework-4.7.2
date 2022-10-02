@@ -23,7 +23,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
     {
         OrderRepository _repoOrder = new OrderRepository();
         TcRepository _repoTc = new TcRepository();
-        DatabaseContext db = new DatabaseContext();
+        private DatabaseContext db;
         public ActionResult CreateOrder()
         {
             return View(new ViewModelOrders());
@@ -124,14 +124,15 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
         [HttpGet]
         public async Task<ActionResult> ShowTc(int tcId)
         {
-
-            ViewModelTc viewModelTc = new ViewModelTc()
+            using (db = new DatabaseContext())
             {
-                Tc = _repoTc.GetTc(tcId),
-                Orders = db.Orders.Where(o => o.TcId == tcId).OrderBy(o => o.Date).ToList()
-            };
-
-            return View(viewModelTc);
+                ViewModelTc viewModelTc = new ViewModelTc()
+                {
+                    Tc = _repoTc.GetTc(tcId),
+                    Orders = db.Orders.Where(o => o.TcId == tcId).OrderBy(o => o.Date).ToList()
+                };
+                return View(viewModelTc);
+            }
         }
 
         [HttpGet]
@@ -153,22 +154,26 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 worksheet.Cell(1, 10).Value = "Дата";
                 worksheet.Row(1).Style.Font.Bold = true;
 
-                var orders = await db.Orders.Where(o => o.Tc.Id == tcId).OrderBy(o => o.Date).ToListAsync();
-                int iter = 1;
-                foreach (Order item in orders)
+                using(db = new DatabaseContext())
                 {
-                    iter++;
-                    worksheet.Cell(iter, 1).Value = item.FirstName;
-                    worksheet.Cell(iter, 2).Value = item.SurName;
-                    worksheet.Cell(iter, 3).Value = item.FirstPlace;
-                    worksheet.Cell(iter, 4).Value = item.LastPlace;
-                    worksheet.Cell(iter, 5).Value = item.Weight;
-                    worksheet.Cell(iter, 6).Value = item.Size;
-                    worksheet.Cell(iter, 7).Value = item.Distance;
-                    worksheet.Cell(iter, 8).Value = item.Price;
-                    worksheet.Cell(iter, 9).Value = _repoTc.GetTc(tcId).Name;
-                    worksheet.Cell(iter, 10).Value = item.Date;
+                    var orders = await db.Orders.Where(o => o.Tc.Id == tcId).OrderBy(o => o.Date).ToListAsync();
+                    int iter = 1;
+                    foreach (Order item in orders)
+                    {
+                        iter++;
+                        worksheet.Cell(iter, 1).Value = item.FirstName;
+                        worksheet.Cell(iter, 2).Value = item.SurName;
+                        worksheet.Cell(iter, 3).Value = item.FirstPlace;
+                        worksheet.Cell(iter, 4).Value = item.LastPlace;
+                        worksheet.Cell(iter, 5).Value = item.Weight;
+                        worksheet.Cell(iter, 6).Value = item.Size;
+                        worksheet.Cell(iter, 7).Value = item.Distance;
+                        worksheet.Cell(iter, 8).Value = item.Price;
+                        worksheet.Cell(iter, 9).Value = _repoTc.GetTc(tcId).Name;
+                        worksheet.Cell(iter, 10).Value = item.Date;
+                    }
                 }
+                
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
