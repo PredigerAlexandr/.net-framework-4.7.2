@@ -203,7 +203,7 @@
       <Name>Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Energy\Energy.csproj">
-      <Project>{E91377D6-1FC8-4D25-A742-028DB4355663}</Project>
+      <Project>{e91377d6-1fc8-4d25-a742-028db4355663}</Project>
       <Name>Energy</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logic\Logic.csproj">
@@ -211,7 +211,7 @@
       <Name>Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\PEK\PEK.csproj">
-      <Project>{F6C8D93C-E606-4030-BD23-C05E7096873C}</Project>
+      <Project>{f6c8d93c-e606-4030-bd23-c05e7096873c}</Project>
       <Name>PEK</Name>
     </ProjectReference>
     <ProjectReference Include="..\Repositories\Repositories.csproj">
@@ -219,7 +219,7 @@
       <Name>Repositories</Name>
     </ProjectReference>
     <ProjectReference Include="..\SDEK\SDEK.csproj">
-      <Project>{02476694-A96A-4B7A-A7B9-CDA42CF3D99B}</Project>
+      <Project>{02476694-a96a-4b7a-a7b9-cda42cf3d99b}</Project>
       <Name>SDEK</Name>
     </ProjectReference>
   </ItemGroup>
@@ -236,9 +236,15 @@
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AllTcs\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -273,6 +279,15 @@
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\Energy\bin\Debug\Energy.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y
+copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\SDEK\bin\Debug\SDEK.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y
+copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\PEK\bin\Debug\PEK.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

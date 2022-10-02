@@ -16,16 +16,19 @@ using System.Diagnostics;
 using System.Data.Entity;
 using System.IO;
 using ClosedXML.Excel;
+using System.Reflection;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
     public class TransportCompanyController : Controller
     {
+
         OrderRepository _repoOrder = new OrderRepository();
         TcRepository _repoTc = new TcRepository();
         private DatabaseContext db;
         public ActionResult CreateOrder()
         {
+            var asm = Assembly.Load("Energy");
             return View(new ViewModelOrders());
         }
 
@@ -33,6 +36,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOrder(ViewModelOrders model)
         {
+
             List<double> FirstCoords = await Coords.GetCoords(model.FirstPlace);
             List<double> LastCoords = await Coords.GetCoords(model.LastPlace);
             if (FirstCoords.Count == 0)
