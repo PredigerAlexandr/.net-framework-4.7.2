@@ -60,6 +60,10 @@
     <Compile Include="Migrations\202210021721387_AddDll.designer.cs">
       <DependentUpon>202210021721387_AddDll.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202210022109452_ChangeColumn.cs" />
+    <Compile Include="Migrations\202210022109452_ChangeColumn.designer.cs">
+      <DependentUpon>202210022109452_ChangeColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202210021721387_AddDll.resx">
       <DependentUpon>202210021721387_AddDll.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202210022109452_ChangeColumn.resx">
+      <DependentUpon>202210022109452_ChangeColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

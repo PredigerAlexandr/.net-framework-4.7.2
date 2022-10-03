@@ -137,6 +137,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TransportCompanyController.cs" />
     <Compile Include="Global.asax.cs">
@@ -157,6 +158,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\logging.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -175,6 +177,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <None Include="Views\TransportCompany\Error.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -238,6 +241,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AllTcs\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -280,9 +284,8 @@
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\Energy\bin\Debug\Energy.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y
-copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\SDEK\bin\Debug\SDEK.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y
-copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\PEK\bin\Debug\PEK.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

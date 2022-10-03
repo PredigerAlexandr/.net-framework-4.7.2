@@ -17,18 +17,21 @@ using System.Data.Entity;
 using System.IO;
 using ClosedXML.Excel;
 using System.Reflection;
+using ClosedXML;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
-    public class TransportCompanyController : Controller
+    public class TransportCompanyController : BaseController
     {
 
         OrderRepository _repoOrder = new OrderRepository();
         TcRepository _repoTc = new TcRepository();
         private DatabaseContext db;
+
         public ActionResult CreateOrder()
         {
-            var asm = Assembly.Load("Energy");
+            var a = 0;
+            int result = 1 / a;
             return View(new ViewModelOrders());
         }
 
@@ -61,37 +64,30 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 var orders = new List<ViewModelOrderItem>();
                 foreach (var company in companies)
                 {
-                    double price = 0;
-                    switch (company.Name)
+                    using(db = new DatabaseContext())
                     {
-                        case ("СДЭК"):
-                            SDEKTc sdekTc = new SDEKTc();
-                            price = sdekTc.CalculateCost(distance, model.Weight, model.Size);
-                            break;
-                        case ("ПЭК"):
-                            PEKTc pekTc = new PEKTc();
-                            price = pekTc.CalculateCost(distance, model.Weight, model.Size);
-                            break;
-                        case ("Энергия"):
-                            EnergyTc energyTc = new EnergyTc();
-                            price = energyTc.CalculateCost(distance, model.Weight, model.Size);
-                            break;
-                    }
+                        double price = 0;
+                        var asmInfo = db.AssemblyInfos.FirstOrDefault(a => a.TcName == company.Name);
+                        var asm = Assembly.Load(asmInfo.Name);
+                        var tcClass = asm.GetType(asmInfo.Name + "." + asmInfo.Name + "Tc");
+                        var calculateCost = tcClass.GetMethod("CalculateCost");
+                        var tcInstance = Activator.CreateInstance(tcClass);
 
-                    orders.Add(new ViewModelOrderItem()
-                    {
-                        FirstName = model.FirstName,
-                        SurName = model.SurName,
-                        Phone = model.Phone,
-                        FirstPlace = model.FirstPlace,
-                        LastPlace = model.LastPlace,
-                        Weight = model.Weight,
-                        Size = model.Size,
-                        Price = price,
-                        Distance = Convert.ToInt32(distance),
-                        TcId = company.Id,
-                        TcName = company.Name,
-                    });
+                        orders.Add(new ViewModelOrderItem()
+                        {
+                            FirstName = model.FirstName,
+                            SurName = model.SurName,
+                            Phone = model.Phone,
+                            FirstPlace = model.FirstPlace,
+                            LastPlace = model.LastPlace,
+                            Weight = model.Weight,
+                            Size = model.Size,
+                            Price = (double)calculateCost.Invoke(tcInstance, new object[] { model.Distance, model.Weight, model.Size }),
+                            Distance = Convert.ToInt32(distance),
+                            TcId = company.Id,
+                            TcName = company.Name,
+                        });
+                    }
                 }
 
                 model.Orders = orders;
@@ -128,7 +124,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
         [HttpGet]
         public async Task<ActionResult> ShowTc(int tcId)
         {
-            using (db = new DatabaseContext())
+            using (var db = new DatabaseContext())
             {
                 ViewModelTc viewModelTc = new ViewModelTc()
                 {
@@ -158,7 +154,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 worksheet.Cell(1, 10).Value = "Дата";
                 worksheet.Row(1).Style.Font.Bold = true;
 
-                using(db = new DatabaseContext())
+                using (db = new DatabaseContext())
                 {
                     var orders = await db.Orders.Where(o => o.Tc.Id == tcId).OrderBy(o => o.Date).ToListAsync();
                     int iter = 1;
@@ -177,7 +173,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                         worksheet.Cell(iter, 10).Value = item.Date;
                     }
                 }
-                
+
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);
@@ -191,6 +187,11 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 }
             }
 
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
 
         public ActionResult TransportCompanies()

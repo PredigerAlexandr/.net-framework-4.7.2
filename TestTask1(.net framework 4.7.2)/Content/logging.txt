@@ -1,0 +1,9 @@
+﻿Attempted to divide by zero.
+Attempted to divide by zero.
+10/3/2022 3:46:29 AM : Attempted to divide by zero.
+10/3/2022 3:47:01 AM : Attempted to divide by zero.
+10/3/2022 3:47:28 AM : Attempted to divide by zero.
+10/3/2022 3:48:26 AM : Attempted to divide by zero.
+10/3/2022 3:49:28 AM : Attempted to divide by zero.
+10/3/2022 3:50:41 AM : Attempted to divide by zero.
+10/3/2022 3:52:54 AM : Attempted to divide by zero.

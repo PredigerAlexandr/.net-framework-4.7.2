@@ -11,12 +11,15 @@ namespace Energy
 {
     public class EnergyTc : Tc, ICalculater
     {
-        private static DatabaseContext db = new DatabaseContext();
-        private static Tc tc = db.Tcs.FirstOrDefault(t => t.Name == "Энергия");
+        private DatabaseContext db;
 
         public double CalculateCost(double distance, double weight, double size)
-        {
-            return distance * tc.CoefficientOfKilometer + size * tc.CoefficientOfSize + weight * tc.CoefficientOfKilogram;
+        {   
+            using(db = new DatabaseContext())
+            {
+                Tc tc = db.Tcs.FirstOrDefault(t => t.Name == "Энергия");
+                return distance * tc.CoefficientOfKilometer + size * tc.CoefficientOfSize + weight * tc.CoefficientOfKilogram;
+            }
         }
     }
 }

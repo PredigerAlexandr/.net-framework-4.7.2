@@ -81,4 +81,7 @@
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\PEK\bin\Debug\PEK.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
