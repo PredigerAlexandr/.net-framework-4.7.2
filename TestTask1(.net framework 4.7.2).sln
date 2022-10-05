@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.Interfaces", "Services.Interfaces\Services.Interfaces.csproj", "{F3EB1CF0-397F-4F2B-AD15-D2A39599C07F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{B1C28DB3-AD18-4EC0-AC86-93ABDA08F44B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{F3EB1CF0-397F-4F2B-AD15-D2A39599C07F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3EB1CF0-397F-4F2B-AD15-D2A39599C07F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3EB1CF0-397F-4F2B-AD15-D2A39599C07F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1C28DB3-AD18-4EC0-AC86-93ABDA08F44B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1C28DB3-AD18-4EC0-AC86-93ABDA08F44B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1C28DB3-AD18-4EC0-AC86-93ABDA08F44B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1C28DB3-AD18-4EC0-AC86-93ABDA08F44B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -98,6 +104,7 @@ Global
 		{0D722C83-D373-4DC2-A58E-F8A0774DA0FD} = {F0BE3F66-DF39-46A4-87EF-459787C63B2D}
 		{92CE11C0-A31E-4E34-B54A-12BE1C17FD09} = {F0BE3F66-DF39-46A4-87EF-459787C63B2D}
 		{F3EB1CF0-397F-4F2B-AD15-D2A39599C07F} = {F0BE3F66-DF39-46A4-87EF-459787C63B2D}
+		{B1C28DB3-AD18-4EC0-AC86-93ABDA08F44B} = {229E0C60-E34B-4FF5-AD66-590AB63F4C48}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {155A4D7D-721D-432E-8FE2-9170F44A9471}

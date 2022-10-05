@@ -20,7 +20,7 @@ using Microsoft.Ajax.Utilities;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
-    public class TransportCompanyController : Controller /*: BaseController*/
+    public class TransportCompanyController : BaseController
     {
 
         OrderRepository _repoOrder = new OrderRepository();
@@ -59,20 +59,22 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
             if (ModelState.IsValid)
             {
                 var companies = _repoTc.GetTcs();
-
+                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 var orders = new List<ViewModelOrderItem>();
                 foreach (var company in companies)
                 {
                     using (db = new DatabaseContext())
                     {
-                        double price = 0;
-                        ICalculater tcCalc;
-                        var asm = Assembly.Load(company.NameDll);
-                        Console.WriteLine("kkkk");
-                        //var asm = Assembly.Load(asmInfo.Name);
-                        //var tcClass = asm.GetType(asmInfo.Name + "." + asmInfo.Name + "Tc");
-                        //var calculateCost = tcClass.GetMethod("CalculateCost");
-                        //var tcInstance = Activator.CreateInstance(tcClass);
+                        if (company.NameDll == "NULL")
+                        {
+                            break;
+                        }
+
+                        var asm = Assembly.LoadFrom(baseDirectory+@"\"+company.NameDll+".dll");
+                        var tcClass = asm.GetType(company.NameDll + "." + company.NameDll + "Tc");
+                        dynamic tc = Activator.CreateInstance(tcClass);
+                        ICalculater tcCalc = tc;
+
 
                         orders.Add(new ViewModelOrderItem()
                         {
@@ -83,7 +85,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                             LastPlace = model.LastPlace,
                             Weight = model.Weight,
                             Size = model.Size,
-                            // Price = (double)calculateCost.Invoke(tcInstance, new object[] { model.Distance, model.Weight, model.Size }),
+                            Price = tcCalc.CalculateCost( model.Distance, model.Weight, model.Size ),
                             Distance = Convert.ToInt32(distance),
                             TcId = company.Id,
                             TcName = company.Name,
@@ -132,6 +134,8 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                     Tc = _repoTc.GetTc(tcId),
                     Orders = db.Orders.Where(o => o.TcId == tcId).OrderBy(o => o.Date).ToList()
                 };
+                if(viewModelTc.Tc == null)
+                    throw new Exception("В БД не найдена запись");
                 return View(viewModelTc);
             }
         }

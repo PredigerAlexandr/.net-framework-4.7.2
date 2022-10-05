@@ -22,11 +22,16 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
 
         protected override void OnException(ExceptionContext filterContext)
         {
+
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             using (StreamWriter reader = new StreamWriter(baseDirectory + @"\Content\logging.txt", true))
             {
-                reader.WriteLine(DateTime.Now.ToString() + " : " + filterContext.Exception.Message);
+                reader.WriteLine(DateTime.Now.ToString() + " : " + filterContext.Exception.Message + filterContext.Exception.StackTrace);
             }
+            
+            if (filterContext.Exception.Message == "В БД не найдена запись")
+                filterContext.Result =
+                 
 
             filterContext.Result =
                 new RedirectResult("/TransportCompany/Error");
