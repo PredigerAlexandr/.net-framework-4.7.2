@@ -205,25 +205,17 @@
       <Project>{88B557CF-1864-49C8-AE5A-04739A460E1F}</Project>
       <Name>Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Energy\Energy.csproj">
-      <Project>{e91377d6-1fc8-4d25-a742-028db4355663}</Project>
-      <Name>Energy</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{92CE11C0-A31E-4E34-B54A-12BE1C17FD09}</Project>
       <Name>Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PEK\PEK.csproj">
-      <Project>{f6c8d93c-e606-4030-bd23-c05e7096873c}</Project>
-      <Name>PEK</Name>
     </ProjectReference>
     <ProjectReference Include="..\Repositories\Repositories.csproj">
       <Project>{C7566A3E-3181-4671-BC63-E2B503310130}</Project>
       <Name>Repositories</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SDEK\SDEK.csproj">
-      <Project>{02476694-a96a-4b7a-a7b9-cda42cf3d99b}</Project>
-      <Name>SDEK</Name>
+    <ProjectReference Include="..\Services.Interfaces\Services.Interfaces.csproj">
+      <Project>{F3EB1CF0-397F-4F2B-AD15-D2A39599C07F}</Project>
+      <Name>Services.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

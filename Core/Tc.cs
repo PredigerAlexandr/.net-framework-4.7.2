@@ -22,6 +22,10 @@ namespace Core
         [Required]
         public double CoefficientOfSize { get; set; }
 
+        public Guid Guid { get; set; }
+
+        public string NameDll { get; set; }
+
         public List<Order> orders { get; set; } = new List<Order>();
 
     }

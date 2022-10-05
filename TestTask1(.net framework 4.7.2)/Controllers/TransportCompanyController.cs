@@ -1,8 +1,5 @@
 ﻿using Core;
-using Energy;
 using Logic;
-using PEK;
-using SDEK;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,10 +15,12 @@ using System.IO;
 using ClosedXML.Excel;
 using System.Reflection;
 using ClosedXML;
+using Services.Interfaces;
+using Microsoft.Ajax.Utilities;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
-    public class TransportCompanyController : BaseController
+    public class TransportCompanyController : Controller /*: BaseController*/
     {
 
         OrderRepository _repoOrder = new OrderRepository();
@@ -30,8 +29,8 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
 
         public ActionResult CreateOrder()
         {
-            var a = 0;
-            int result = 1 / a;
+            //var a = 0;
+            //int result = 1 / a;
             return View(new ViewModelOrders());
         }
 
@@ -64,14 +63,16 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 var orders = new List<ViewModelOrderItem>();
                 foreach (var company in companies)
                 {
-                    using(db = new DatabaseContext())
+                    using (db = new DatabaseContext())
                     {
                         double price = 0;
-                        var asmInfo = db.AssemblyInfos.FirstOrDefault(a => a.TcName == company.Name);
-                        var asm = Assembly.Load(asmInfo.Name);
-                        var tcClass = asm.GetType(asmInfo.Name + "." + asmInfo.Name + "Tc");
-                        var calculateCost = tcClass.GetMethod("CalculateCost");
-                        var tcInstance = Activator.CreateInstance(tcClass);
+                        ICalculater tcCalc;
+                        var asm = Assembly.Load(company.NameDll);
+                        Console.WriteLine("kkkk");
+                        //var asm = Assembly.Load(asmInfo.Name);
+                        //var tcClass = asm.GetType(asmInfo.Name + "." + asmInfo.Name + "Tc");
+                        //var calculateCost = tcClass.GetMethod("CalculateCost");
+                        //var tcInstance = Activator.CreateInstance(tcClass);
 
                         orders.Add(new ViewModelOrderItem()
                         {
@@ -82,7 +83,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                             LastPlace = model.LastPlace,
                             Weight = model.Weight,
                             Size = model.Size,
-                            Price = (double)calculateCost.Invoke(tcInstance, new object[] { model.Distance, model.Weight, model.Size }),
+                            // Price = (double)calculateCost.Invoke(tcInstance, new object[] { model.Distance, model.Weight, model.Size }),
                             Distance = Convert.ToInt32(distance),
                             TcId = company.Id,
                             TcName = company.Name,

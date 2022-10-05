@@ -84,4 +84,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\SDEK\bin\Debug\SDEK.dll" "C:\Users\Alexandr\Desktop\work\TestTask1(.net framework 4.7.2)\TestTask1(.net framework 4.7.2)\AllTcs" /y</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>copy "$(ProjectDir)bin\Debug\SDEK.dll" "$(SolutionDir)TestTask1(.net framework 4.7.2)\AllTcs" /y</PreBuildEvent>
+  </PropertyGroup>
 </Project>
