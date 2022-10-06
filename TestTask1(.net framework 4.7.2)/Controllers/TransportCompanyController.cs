@@ -17,6 +17,7 @@ using System.Reflection;
 using ClosedXML;
 using Services.Interfaces;
 using Microsoft.Ajax.Utilities;
+using System.Net;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
@@ -29,8 +30,8 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
 
         public ActionResult CreateOrder()
         {
-            //var a = 0;
-            //int result = 1 / a;
+            var a = 0;
+            int result = 1 / a;
             return View(new ViewModelOrders());
         }
 
@@ -194,9 +195,14 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
 
         }
 
-        public ActionResult Error()
+        public HttpStatusCodeResult Error404()
         {
-            return View();
+            return new HttpStatusCodeResult(HttpStatusCode.NotFound, "Not found record in DataBase");
+        }
+
+        public HttpStatusCodeResult Error500(string error)
+        {
+            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError , error);
         }
 
         public ActionResult TransportCompanies()

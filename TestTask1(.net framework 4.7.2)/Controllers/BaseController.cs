@@ -28,14 +28,15 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
             {
                 reader.WriteLine(DateTime.Now.ToString() + " : " + filterContext.Exception.Message + filterContext.Exception.StackTrace);
             }
-            
-            if (filterContext.Exception.Message == "В БД не найдена запись")
-                filterContext.Result =
-                 
 
-            filterContext.Result =
-                new RedirectResult("/TransportCompany/Error");
-            
+            if (filterContext.Exception.Message == "В БД не найдена запись")
+                filterContext.Result = 
+                    new RedirectToRouteResult(new RouteValueDictionary(new { controller = "TransportCompany", action = "Error404"}));
+            else
+                filterContext.Result = 
+                    new RedirectToRouteResult(new RouteValueDictionary(new { controller = "TransportCompany", action = "Error500", error = filterContext.Exception.Message }));
+
+
             filterContext.ExceptionHandled = true;
         }
     }
