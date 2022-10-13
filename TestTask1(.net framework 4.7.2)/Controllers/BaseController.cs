@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Web;
@@ -30,11 +31,11 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
             }
 
             if (filterContext.Exception.Message == "В БД не найдена запись")
-                filterContext.Result = 
-                    new RedirectToRouteResult(new RouteValueDictionary(new { controller = "TransportCompany", action = "Error404"}));
+                filterContext.Result =
+                new HttpStatusCodeResult(HttpStatusCode.NotFound, "Not found record in DataBase");
             else
-                filterContext.Result = 
-                    new RedirectToRouteResult(new RouteValueDictionary(new { controller = "TransportCompany", action = "Error500", error = filterContext.Exception.Message }));
+                filterContext.Result =
+                 new HttpStatusCodeResult(HttpStatusCode.InternalServerError, filterContext.Exception.Message);
 
 
             filterContext.ExceptionHandled = true;

@@ -30,8 +30,6 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
 
         public ActionResult CreateOrder()
         {
-            var a = 0;
-            int result = 1 / a;
             return View(new ViewModelOrders());
         }
 
@@ -71,7 +69,8 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                             break;
                         }
 
-                        var asm = Assembly.LoadFrom(baseDirectory+@"\"+company.NameDll+".dll");
+                        var asm = Assembly.LoadFrom(baseDirectory+@"\AllTcs\"+company.NameDll+".dll");
+                        var res = baseDirectory;
                         var tcClass = asm.GetType(company.NameDll + "." + company.NameDll + "Tc");
                         dynamic tc = Activator.CreateInstance(tcClass);
                         ICalculater tcCalc = tc;
@@ -136,7 +135,9 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                     Orders = db.Orders.Where(o => o.TcId == tcId).OrderBy(o => o.Date).ToList()
                 };
                 if(viewModelTc.Tc == null)
+                {
                     throw new Exception("В БД не найдена запись");
+                }
                 return View(viewModelTc);
             }
         }
@@ -193,16 +194,6 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 }
             }
 
-        }
-
-        public HttpStatusCodeResult Error404()
-        {
-            return new HttpStatusCodeResult(HttpStatusCode.NotFound, "Not found record in DataBase");
-        }
-
-        public HttpStatusCodeResult Error500(string error)
-        {
-            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError , error);
         }
 
         public ActionResult TransportCompanies()
