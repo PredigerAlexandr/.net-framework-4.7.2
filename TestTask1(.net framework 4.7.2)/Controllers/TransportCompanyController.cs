@@ -19,6 +19,7 @@ using Services.Interfaces;
 using Microsoft.Ajax.Utilities;
 using System.Net;
 using DocumentFormat.OpenXml.Wordprocessing;
+using TestTask1_.net_framework_4._7._2_.CustomErrors;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
@@ -208,13 +209,4 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
             return View(tcs);
         }
     }
-
-    class RecordException : ArgumentException
-    {
-        public RecordException(string msg = "record not found")
-            :base(msg)
-        {
-        }
-    }
-
 }
