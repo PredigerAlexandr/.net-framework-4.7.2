@@ -18,6 +18,7 @@ using ClosedXML;
 using Services.Interfaces;
 using Microsoft.Ajax.Utilities;
 using System.Net;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace TestTask1_.net_framework_4._7._2_.Controllers
 {
@@ -30,6 +31,8 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
 
         public ActionResult CreateOrder()
         {
+            var o = 0;
+            int c = 1 / o;
             return View(new ViewModelOrders());
         }
 
@@ -136,7 +139,7 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 };
                 if(viewModelTc.Tc == null)
                 {
-                    throw new Exception("В БД не найдена запись");
+                    throw new RecordException();
                 }
                 return View(viewModelTc);
             }
@@ -203,6 +206,14 @@ namespace TestTask1_.net_framework_4._7._2_.Controllers
                 Tcs = _repoTc.GetTcs()
             };
             return View(tcs);
+        }
+    }
+
+    class RecordException : ArgumentException
+    {
+        public RecordException(string msg = "record not found")
+            :base(msg)
+        {
         }
     }
 
